@@ -57,6 +57,7 @@ export class User {
   })
   creditCardNumber: string;
 
+  //TODO: Apply encryption
   @Column({
     nullable: true,
     type: 'text',

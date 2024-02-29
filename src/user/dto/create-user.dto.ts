@@ -25,7 +25,9 @@ export class CreateUserDto {
   @IsString()
   email: string;
 
+  //!Necessary when the user is going to buy
   @IsString()
+  @IsOptional()
   phone?: string;
 
   @IsString()
@@ -37,14 +39,17 @@ export class CreateUserDto {
   })
   password: string;
 
+  //!Necessary when the user is going to buy
   @IsString()
   @IsOptional()
   address?: string;
 
+  //!Necessary when the user is going to buy
   @IsString()
   @IsOptional()
   creditCardNumber?: string;
 
+  //!Necessary when the user is going to buy
   @IsString()
   @IsOptional()
   creditCardPass: string;
