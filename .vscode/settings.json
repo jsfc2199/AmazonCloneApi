@@ -1,6 +1,7 @@
 {
     "jest.runMode": "on-demand",
     "cSpell.words": [
+        "ormconfig",
         "postgres",
         "typeorm"
     ]

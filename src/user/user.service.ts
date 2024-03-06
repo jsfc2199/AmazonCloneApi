@@ -3,12 +3,14 @@ import {
   Injectable,
   InternalServerErrorException,
   Logger,
+  NotFoundException,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -19,8 +21,13 @@ export class UserService {
   ) {}
   async create(createUserDto: CreateUserDto) {
     try {
-      const user = this.userRepository.create(createUserDto);
+      const { password, ...userData } = createUserDto;
+      const user = this.userRepository.create({
+        ...userData,
+        password: await bcrypt.hash(password, 10),
+      });
       await this.userRepository.save(user);
+      delete user.password;
       return {
         user,
       };
@@ -37,8 +44,24 @@ export class UserService {
     return `This action returns a #${id} user`;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    try {
+      //https://typeorm.io/sequelize-migration#working-with-models
+      //if you want to load an existing entity from the database and replace some of its properties you can use the following method (preload)
+      const userDB = await this.userRepository.preload({
+        uuid: id,
+        ...updateUserDto,
+      });
+      if (!userDB)
+        throw new NotFoundException(`User with id ${id} does not exist`);
+      const userUpdated = await this.userRepository.save(userDB);
+      delete userUpdated.password;
+      return {
+        userUpdated,
+      };
+    } catch (error: any) {
+      this.handleExceptions(error);
+    }
   }
 
   remove(id: number) {

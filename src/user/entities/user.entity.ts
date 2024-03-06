@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BeforeUpdate, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 
 @Entity({ name: 'users' })
 export class User {
@@ -26,18 +27,11 @@ export class User {
 
   @Column({
     nullable: false,
-    unique: true,
+    unique: false,
     type: 'text',
   })
   email: string;
 
-  @Column({
-    nullable: true,
-    type: 'text',
-  })
-  phone: string;
-
-  //TODO: Apply encryption
   @Column({
     nullable: false,
     select: false, //If we do a find method, the password is not going to be shown in the response
@@ -48,19 +42,16 @@ export class User {
     nullable: true,
     type: 'text',
   })
-  address: string;
+  phone: string;
 
-  @Column({
-    nullable: true,
-    unique: true,
-    type: 'text',
-  })
-  creditCardNumber: string;
-
-  //TODO: Apply encryption
   @Column({
     nullable: true,
     type: 'text',
   })
-  creditCardPass: string;
+  cellphone: string;
+
+  @BeforeUpdate()
+  async hashPassword() {
+    this.password = await bcrypt.hash(this.password, 10);
+  }
 }

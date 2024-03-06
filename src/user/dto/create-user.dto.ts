@@ -25,11 +25,6 @@ export class CreateUserDto {
   @IsString()
   email: string;
 
-  //!Necessary when the user is going to buy
-  @IsString()
-  @IsOptional()
-  phone?: string;
-
   @IsString()
   @MinLength(6)
   @MaxLength(50)
@@ -42,15 +37,10 @@ export class CreateUserDto {
   //!Necessary when the user is going to buy
   @IsString()
   @IsOptional()
-  address?: string;
+  phone?: string;
 
   //!Necessary when the user is going to buy
   @IsString()
   @IsOptional()
-  creditCardNumber?: string;
-
-  //!Necessary when the user is going to buy
-  @IsString()
-  @IsOptional()
-  creditCardPass: string;
+  cellphone?: string;
 }
