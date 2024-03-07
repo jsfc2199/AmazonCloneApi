@@ -5,12 +5,14 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
 import { dataSourceOptions } from 'ormconfig';
+import { CommonModule } from './common/common.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot(dataSourceOptions),
     UserModule,
+    CommonModule,
   ],
   controllers: [AppController],
   providers: [AppService],

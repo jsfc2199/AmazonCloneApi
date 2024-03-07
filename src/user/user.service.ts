@@ -11,6 +11,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
 
 @Injectable()
 export class UserService {
@@ -36,12 +37,21 @@ export class UserService {
     }
   }
 
-  findAll() {
-    return `This action returns all user`;
+  async findAll(pagination: PaginationDto) {
+    const { limit, offset } = pagination;
+    const allUsers = await this.userRepository.find({
+      take: limit,
+      skip: offset,
+    });
+    return allUsers;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(uuid: string) {
+    const user = await this.userRepository.findOneBy({
+      uuid,
+    });
+    if (!user) throw new NotFoundException(`No user found with id: ${uuid}`);
+    return user;
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
@@ -64,8 +74,10 @@ export class UserService {
     }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: string) {
+    const userDeleted = await this.findOne(id);
+    await this.userRepository.remove(userDeleted);
+    return userDeleted;
   }
 
   private handleExceptions(error: any) {
