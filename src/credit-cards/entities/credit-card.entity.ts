@@ -9,6 +9,7 @@ export class CreditCard {
   @Column({
     nullable: false,
     select: false,
+    unique: true,
     type: 'text',
   })
   creditCardNumber: string;

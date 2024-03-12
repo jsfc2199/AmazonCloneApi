@@ -69,7 +69,7 @@ export class User {
       name: 'credit_card_id', //column name (for the other entity)
     },
   })
-  creditCards: CreditCard[];
+  creditCards?: CreditCard[];
 
   @BeforeUpdate()
   async hashPassword() {

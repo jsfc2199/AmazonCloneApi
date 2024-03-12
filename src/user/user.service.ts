@@ -1,10 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  InternalServerErrorException,
-  Logger,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -12,10 +6,10 @@ import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { ErrorHandler } from 'src/common/errors/errors-handler';
 
 @Injectable()
 export class UserService {
-  private readonly logger = new Logger('UserService');
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
@@ -33,7 +27,7 @@ export class UserService {
         user,
       };
     } catch (error: any) {
-      this.handleExceptions(error);
+      ErrorHandler.handleExceptions(error);
     }
   }
 
@@ -70,7 +64,7 @@ export class UserService {
         userUpdated,
       };
     } catch (error: any) {
-      this.handleExceptions(error);
+      ErrorHandler.handleExceptions(error);
     }
   }
 
@@ -78,12 +72,5 @@ export class UserService {
     const userDeleted = await this.findOne(id);
     await this.userRepository.remove(userDeleted);
     return userDeleted;
-  }
-
-  private handleExceptions(error: any) {
-    if (error.code === '23505')
-      throw new BadRequestException(`Error: ${error.detail}`);
-    this.logger.error(error);
-    throw new InternalServerErrorException('Unexpected error. Check logs');
   }
 }
