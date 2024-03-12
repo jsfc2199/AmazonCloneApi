@@ -1,16 +1,17 @@
-import { IsString, Length, Matches, MinLength } from 'class-validator';
+import { IsString, MinLength, Validate } from 'class-validator';
+import {
+  IsStringNumberPositive,
+  CvcLengthValidator,
+} from '../../common/validators';
+
 export class CreateCreditCardDto {
-  @IsString()
   @MinLength(10)
-  @Matches(/^\d+$/, {
-    message: 'Credit Card Number must be only numbers',
-  })
+  @IsString()
+  @Validate(IsStringNumberPositive)
   creditCardNumber: string;
 
   @IsString()
-  @Length(3, 3)
-  @Matches(/^\d+$/, {
-    message: 'CVC must be only numbers',
-  })
+  @Validate(IsStringNumberPositive)
+  @Validate(CvcLengthValidator)
   creditCardPass: string;
 }
