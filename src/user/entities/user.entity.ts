@@ -1,5 +1,13 @@
-import { BeforeUpdate, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BeforeUpdate,
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { CreditCard } from 'src/credit-cards/entities/credit-card.entity';
 
 @Entity({ name: 'users' })
 export class User {
@@ -49,6 +57,19 @@ export class User {
     type: 'text',
   })
   cellphone: string;
+
+  //second argument is the field with the relation
+  @ManyToMany(() => CreditCard, (creditCard) => creditCard.user)
+  @JoinTable({
+    name: 'users_cards', //table name
+    joinColumn: {
+      name: 'user_id', //column name (for this entity)
+    },
+    inverseJoinColumn: {
+      name: 'credit_card_id', //column name (for the other entity)
+    },
+  })
+  creditCards: CreditCard[];
 
   @BeforeUpdate()
   async hashPassword() {

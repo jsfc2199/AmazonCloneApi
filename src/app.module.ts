@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
 import { dataSourceOptions } from 'ormconfig';
 import { CommonModule } from './common/common.module';
+import { CreditCardsModule } from './credit-cards/credit-cards.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { CommonModule } from './common/common.module';
     TypeOrmModule.forRoot(dataSourceOptions),
     UserModule,
     CommonModule,
+    CreditCardsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
