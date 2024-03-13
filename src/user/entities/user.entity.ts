@@ -64,9 +64,11 @@ export class User {
     name: 'users_cards', //table name
     joinColumn: {
       name: 'user_id', //column name (for this entity)
+      referencedColumnName: 'uuid',
     },
     inverseJoinColumn: {
       name: 'credit_card_id', //column name (for the other entity)
+      referencedColumnName: 'uuid',
     },
   })
   creditCards?: CreditCard[];

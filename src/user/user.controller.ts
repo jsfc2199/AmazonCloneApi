@@ -13,10 +13,15 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { AddCardUseCase } from './usecases/add-card.use-case';
+import { CreateCreditCardDto } from 'src/credit-cards/dto/create-credit-card.dto';
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly addCardUseCase: AddCardUseCase,
+  ) {}
 
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
@@ -44,5 +49,10 @@ export class UserController {
   @Delete(':uuid')
   remove(@Param('uuid') uuid: string) {
     return this.userService.remove(uuid);
+  }
+
+  @Post(':uuid')
+  borrar(@Body() createCard: CreateCreditCardDto, @Param('uuid') uuid: string) {
+    return this.addCardUseCase.execute(uuid, createCard);
   }
 }

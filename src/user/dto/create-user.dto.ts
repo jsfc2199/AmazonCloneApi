@@ -1,7 +1,9 @@
+import { CreditCard } from '../../credit-cards/entities/credit-card.entity';
 import {
   IsEmail,
   IsOptional,
   IsString,
+  IsUUID,
   Matches,
   MaxLength,
   MinLength,
@@ -43,4 +45,11 @@ export class CreateUserDto {
   @IsString()
   @IsOptional()
   cellphone?: string;
+
+  @IsString()
+  @IsUUID()
+  @IsOptional()
+  cardsIds?: string[];
+
+  creditCards?: CreditCard[];
 }

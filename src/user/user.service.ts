@@ -41,11 +41,19 @@ export class UserService {
   }
 
   async findOne(uuid: string) {
-    const user = await this.userRepository.findOneBy({
-      uuid,
-    });
-    if (!user) throw new NotFoundException(`No user found with id: ${uuid}`);
-    return user;
+    try {
+      const user = await this.userRepository.findOneOrFail({
+        where: {
+          uuid,
+        },
+        relations: {
+          creditCards: true,
+        },
+      });
+      return user;
+    } catch (e) {
+      throw new NotFoundException(`No user found with id: ${uuid}`);
+    }
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {

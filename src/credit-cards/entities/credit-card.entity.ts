@@ -8,7 +8,7 @@ export class CreditCard {
 
   @Column({
     nullable: false,
-    select: false,
+    select: true, //
     unique: true,
     type: 'text',
   })
@@ -16,7 +16,7 @@ export class CreditCard {
 
   @Column({
     nullable: false,
-    select: false,
+    select: true,
     type: 'text',
   })
   creditCardPass: string;
