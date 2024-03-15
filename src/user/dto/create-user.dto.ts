@@ -6,6 +6,7 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
+import { CreditCard } from 'src/credit-cards/entities/credit-card.entity';
 
 export class CreateUserDto {
   @MinLength(6)
@@ -43,4 +44,7 @@ export class CreateUserDto {
   @IsString()
   @IsOptional()
   cellphone?: string;
+
+  @IsOptional()
+  creditCards?: CreditCard[];
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { CreateCreditCardDto } from './dto/create-credit-card.dto';
 import { UpdateCreditCardDto } from './dto/update-credit-card.dto';
 import { Repository } from 'typeorm';
@@ -6,34 +6,45 @@ import { CreditCard } from './entities/credit-card.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { ErrorHandler } from '../common/errors/errors-handler';
+import { CreateUserDto } from 'src/user/dto/create-user.dto';
 
 @Injectable()
 export class CreditCardsService {
+  private readonly logger = new Logger();
   constructor(
     @InjectRepository(CreditCard)
     private readonly creditCardRepository: Repository<CreditCard>,
   ) {}
-  async create(createCreditCardDto: CreateCreditCardDto) {
+  async create(
+    createCreditCardDto: CreateCreditCardDto,
+    user?: CreateUserDto,
+  ): Promise<string> {
     try {
       const { creditCardPass, ...cardData } = createCreditCardDto;
 
       const card = this.creditCardRepository.create({
         ...cardData,
         creditCardPass: await bcrypt.hash(creditCardPass, 10),
+        user: [user], //is an array because is many to many
       });
 
-      await this.creditCardRepository.save(card);
+      const cardToSave = await this.creditCardRepository.save(card);
 
-      return {
-        card: {
-          ...card,
-          creditCardPass: undefined,
-          creditCardNumber: undefined,
-        },
-      };
+      return cardToSave.uuid;
     } catch (error) {
       ErrorHandler.handleExceptions(error);
     }
+  }
+
+  async findByCardNumber(cardNumber: string): Promise<CreditCard> {
+    try {
+      const card = await this.creditCardRepository.findOneOrFail({
+        where: {
+          creditCardNumber: cardNumber,
+        },
+      });
+      return card;
+    } catch (error) {}
   }
 
   findAll() {

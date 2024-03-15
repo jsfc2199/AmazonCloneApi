@@ -8,5 +8,6 @@ import { CreditCard } from './entities/credit-card.entity';
   imports: [TypeOrmModule.forFeature([CreditCard])],
   controllers: [CreditCardsController],
   providers: [CreditCardsService],
+  exports: [CreditCardsService],
 })
 export class CreditCardsModule {}
