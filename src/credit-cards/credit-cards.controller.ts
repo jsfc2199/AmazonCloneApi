@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { CreditCardsService } from './credit-cards.service';
 import { CreateCreditCardDto } from './dto/create-credit-card.dto';
 import { UpdateCreditCardDto } from './dto/update-credit-card.dto';
@@ -23,7 +31,10 @@ export class CreditCardsController {
   }
 
   @Patch(':uuid')
-  update(@Param('uuid') uuid: string, @Body() updateCreditCardDto: UpdateCreditCardDto) {
+  update(
+    @Param('uuid') uuid: string,
+    @Body() updateCreditCardDto: UpdateCreditCardDto,
+  ) {
     return this.creditCardsService.update(+uuid, updateCreditCardDto);
   }
 

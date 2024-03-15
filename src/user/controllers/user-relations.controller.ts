@@ -1,6 +1,6 @@
 import { Controller, Post, Body, Param, ParseUUIDPipe } from '@nestjs/common';
 import { UserCardRelationUseCase } from '../use-cases/user-card-relation.use-cases';
-import { CreateCreditCardDto } from 'src/credit-cards/dto/create-credit-card.dto';
+import { CreateCreditCardDto } from '../../credit-cards/dto/create-credit-card.dto';
 
 @Controller('user-relations')
 export class UserRelationsController {

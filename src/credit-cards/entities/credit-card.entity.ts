@@ -1,5 +1,5 @@
-import { User } from 'src/user/entities/user.entity';
 import { PrimaryGeneratedColumn, Column, ManyToMany, Entity } from 'typeorm';
+import { User } from '../../user/entities/user.entity';
 
 @Entity()
 export class CreditCard {

@@ -5,8 +5,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
-import { ErrorHandler } from 'src/common/errors/errors-handler';
+import { ErrorHandler } from '../common/errors/errors-handler';
+import { PaginationDto } from '../common/dto/pagination.dto';
 
 @Injectable()
 export class UserService {
