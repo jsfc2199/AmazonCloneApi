@@ -7,6 +7,7 @@ import { UserModule } from './user/user.module';
 import { dataSourceOptions } from 'ormconfig';
 import { CommonModule } from './common/common.module';
 import { CreditCardsModule } from './credit-cards/credit-cards.module';
+import { AddressesModule } from './addresses/addresses.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { CreditCardsModule } from './credit-cards/credit-cards.module';
     UserModule,
     CommonModule,
     CreditCardsModule,
+    AddressesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

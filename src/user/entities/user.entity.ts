@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { CreditCard } from '../../credit-cards/entities/credit-card.entity';
+import { Address } from '../../addresses/entities/address.entity';
 
 @Entity({ name: 'users' })
 export class User {
@@ -70,6 +71,18 @@ export class User {
     },
   })
   creditCards?: CreditCard[];
+
+  @ManyToMany(() => Address, (address) => address.user)
+  @JoinTable({
+    name: 'users_addresses',
+    joinColumn: {
+      name: 'user_id',
+    },
+    inverseJoinColumn: {
+      name: 'address_id',
+    },
+  })
+  addresses?: Address[];
 
   @BeforeUpdate()
   async hashPassword() {
