@@ -1,7 +1,11 @@
 {
     "jest.runMode": "on-demand",
     "cSpell.words": [
+        "Aland",
         "Cervera",
+        "D'Ivoire",
+        "Jamahiriya",
+        "Mcdonald",
         "ormconfig",
         "postgres",
         "typeorm"

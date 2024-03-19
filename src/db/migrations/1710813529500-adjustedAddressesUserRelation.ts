@@ -1,11 +1,13 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class UserAddresssRelation1710804186082 implements MigrationInterface {
-  name = 'UserAddresssRelation1710804186082';
+export class AdjustedAddressesUserRelation1710813529500
+  implements MigrationInterface
+{
+  name = 'AdjustedAddressesUserRelation1710813529500';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `CREATE TABLE "address" ("uuid" uuid NOT NULL DEFAULT uuid_generate_v4(), "address" text NOT NULL, CONSTRAINT "UQ_0a1ed89729fa10ba8b81b99f305" UNIQUE ("address"), CONSTRAINT "PK_496d4a29b0dfa82ede19a4bcad0" PRIMARY KEY ("uuid"))`,
+      `CREATE TABLE "address" ("uuid" uuid NOT NULL DEFAULT uuid_generate_v4(), "country" text NOT NULL, "city" text NOT NULL, "streetAddress" text NOT NULL, CONSTRAINT "UQ_8c67f72e8a7209d46281c975542" UNIQUE ("streetAddress"), CONSTRAINT "PK_496d4a29b0dfa82ede19a4bcad0" PRIMARY KEY ("uuid"))`,
     );
     await queryRunner.query(
       `CREATE TABLE "users_addresses" ("user_id" uuid NOT NULL, "address_id" uuid NOT NULL, CONSTRAINT "PK_6fdf8905a58ed0f936d7e17e6e6" PRIMARY KEY ("user_id", "address_id"))`,

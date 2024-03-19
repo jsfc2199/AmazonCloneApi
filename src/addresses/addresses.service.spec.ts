@@ -4,7 +4,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { Address } from './entities/address.entity';
 
 const address = new Address();
-address.address = 'this is and address 2';
+address.streetAddress = 'this is and address 2';
 describe('AddressesService', () => {
   let service: AddressesService;
 

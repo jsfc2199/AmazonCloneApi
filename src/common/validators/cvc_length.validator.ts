@@ -4,7 +4,7 @@ import {
   ValidatorConstraintInterface,
 } from 'class-validator';
 
-@ValidatorConstraint({ name: 'isStringNumberPositive', async: true })
+@ValidatorConstraint({ name: 'cvcLengthValidator', async: true })
 @Injectable()
 export class CvcLengthValidator implements ValidatorConstraintInterface {
   validate(value: string): boolean | Promise<boolean> {

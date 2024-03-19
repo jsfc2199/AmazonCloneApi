@@ -9,9 +9,23 @@ export class Address {
   @Column({
     type: 'text',
     nullable: false,
+    unique: false,
+  })
+  country: string;
+
+  @Column({
+    type: 'text',
+    nullable: false,
+    unique: false,
+  })
+  city: string;
+
+  @Column({
+    type: 'text',
+    nullable: false,
     unique: true,
   })
-  address: string;
+  streetAddress: string;
 
   @ManyToMany(() => User, (user) => user.addresses)
   user: User[];
