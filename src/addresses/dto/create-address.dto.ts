@@ -1,6 +1,5 @@
 import { IsString, Matches, Validate } from 'class-validator';
 import { CountryCityValidator } from '../../common/validators/country-city.validator.';
-import { BeforeInsert, BeforeUpdate } from 'typeorm';
 
 export class CreateAddressDto {
   @IsString()
@@ -18,12 +17,4 @@ export class CreateAddressDto {
     message: 'Address must contain letters and numbers',
   })
   streetAddress: string;
-
-  @BeforeInsert()
-  @BeforeUpdate()
-  capitalize() {
-    this.country.toUpperCase();
-    this.city.toUpperCase();
-    this.streetAddress.toUpperCase();
-  }
 }
