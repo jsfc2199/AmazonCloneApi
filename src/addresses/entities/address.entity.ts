@@ -1,4 +1,11 @@
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BeforeInsert,
+  BeforeUpdate,
+  Column,
+  Entity,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { User } from '../../user/entities/user.entity';
 
 @Entity()
@@ -29,4 +36,12 @@ export class Address {
 
   @ManyToMany(() => User, (user) => user.addresses)
   user: User[];
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  capitalize() {
+    this.country = this.country.toUpperCase();
+    this.city = this.city.toUpperCase();
+    this.streetAddress = this.streetAddress.toUpperCase();
+  }
 }
