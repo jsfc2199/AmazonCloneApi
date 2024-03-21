@@ -5,6 +5,7 @@ import { Address } from './entities/address.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ErrorHandler } from '../common/errors/errors-handler';
+import { CreateUserDto } from '../user/dto/create-user.dto';
 
 @Injectable()
 export class AddressesService {
@@ -12,11 +13,34 @@ export class AddressesService {
     @InjectRepository(Address)
     private readonly addressRepository: Repository<Address>,
   ) {}
-  async create(createAddressDto: CreateAddressDto) {
+  async create(createAddressDto: CreateAddressDto, user?: CreateUserDto) {
     try {
-      const address = await this.addressRepository.create(createAddressDto);
-      const addressToSave = await this.addressRepository.save(address);
+      const address = this.addressRepository.create(createAddressDto);
+      const { city, country, streetAddress } = address;
+      const addressToSave = await this.addressRepository.save({
+        ...address,
+        city: city.toUpperCase(),
+        country: country.toUpperCase(),
+        streetAddress: streetAddress.toUpperCase(),
+        user: [user],
+      });
       return addressToSave;
+    } catch (error) {
+      ErrorHandler.handleExceptions(error);
+    }
+  }
+
+  async findByAddressProps(addressDto: UpdateAddressDto) {
+    try {
+      const { city, country, streetAddress } = addressDto;
+      const address = await this.addressRepository.findOneOrFail({
+        where: {
+          city: city.toUpperCase(),
+          country: country.toUpperCase(),
+          streetAddress: streetAddress.toUpperCase(),
+        },
+      });
+      return address;
     } catch (error) {
       ErrorHandler.handleExceptions(error);
     }

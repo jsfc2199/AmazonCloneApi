@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateCreditCardDto } from './dto/create-credit-card.dto';
 import { UpdateCreditCardDto } from './dto/update-credit-card.dto';
 import { Repository } from 'typeorm';
@@ -10,7 +10,6 @@ import { CreateUserDto } from 'src/user/dto/create-user.dto';
 
 @Injectable()
 export class CreditCardsService {
-  private readonly logger = new Logger();
   constructor(
     @InjectRepository(CreditCard)
     private readonly creditCardRepository: Repository<CreditCard>,
@@ -44,7 +43,9 @@ export class CreditCardsService {
         },
       });
       return card;
-    } catch (error) {}
+    } catch (error) {
+      ErrorHandler.handleExceptions(error);
+    }
   }
 
   findAll() {

@@ -32,25 +32,33 @@ export class UserService {
   }
 
   async findAll(pagination: PaginationDto) {
-    const { limit, offset } = pagination;
-    const allUsers = await this.userRepository.find({
-      take: limit,
-      skip: offset,
-    });
-    return allUsers;
+    try {
+      const { limit, offset } = pagination;
+      const allUsers = await this.userRepository.find({
+        take: limit,
+        skip: offset,
+      });
+      return allUsers;
+    } catch (error) {
+      ErrorHandler.handleExceptions(error);
+    }
   }
 
   async findOne(uuid: string): Promise<User> {
-    const user = await this.userRepository.findOne({
-      where: {
-        uuid,
-      },
-      relations: {
-        creditCards: true,
-      },
-    });
-    if (!user) throw new NotFoundException(`No user found with id: ${uuid}`);
-    return user;
+    try {
+      const user = await this.userRepository.findOneOrFail({
+        where: {
+          uuid,
+        },
+        relations: {
+          creditCards: true,
+          addresses: true,
+        },
+      });
+      return user;
+    } catch (error) {
+      ErrorHandler.handleExceptions(error);
+    }
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
@@ -74,8 +82,12 @@ export class UserService {
   }
 
   async remove(id: string) {
-    const userDeleted = await this.findOne(id);
-    await this.userRepository.remove(userDeleted);
-    return userDeleted;
+    try {
+      const userDeleted = await this.findOne(id);
+      await this.userRepository.remove(userDeleted);
+      return userDeleted;
+    } catch (error) {
+      ErrorHandler.handleExceptions(error);
+    }
   }
 }

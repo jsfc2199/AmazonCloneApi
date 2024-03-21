@@ -1,5 +1,4 @@
 import {
-  BeforeInsert,
   BeforeUpdate,
   Column,
   Entity,
@@ -30,14 +29,13 @@ export class Address {
   @Column({
     type: 'text',
     nullable: false,
-    unique: true,
+    unique: false,
   })
   streetAddress: string;
 
   @ManyToMany(() => User, (user) => user.addresses)
   user: User[];
 
-  @BeforeInsert()
   @BeforeUpdate()
   capitalize() {
     this.country = this.country.toUpperCase();

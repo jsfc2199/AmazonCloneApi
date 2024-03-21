@@ -53,7 +53,7 @@ describe('UserService', () => {
       expect(repoSpy).toHaveBeenCalledTimes(1);
       expect(repoSpy).toHaveBeenCalledWith({
         where: { uuid },
-        relations: { creditCards: true },
+        relations: { creditCards: true, addresses: true },
       });
     });
   });

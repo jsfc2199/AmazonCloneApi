@@ -6,6 +6,7 @@
         "D'Ivoire",
         "Jamahiriya",
         "Mcdonald",
+        "nestjs",
         "ormconfig",
         "postgres",
         "typeorm"
