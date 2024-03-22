@@ -25,6 +25,7 @@ describe('UserService', () => {
           provide: getRepositoryToken(User),
           useValue: {
             findOne: jest.fn().mockResolvedValue(user),
+            findOneOrFail: jest.fn().mockResolvedValue(user),
           },
         },
       ],
@@ -43,7 +44,7 @@ describe('UserService', () => {
     it('should return one user', async () => {
       //arrange
       const uuid = 'an uuid';
-      const repoSpy = jest.spyOn(userRepositoryMock, 'findOne');
+      const repoSpy = jest.spyOn(userRepositoryMock, 'findOneOrFail');
 
       //act
       const userFound = userService.findOne(uuid);
