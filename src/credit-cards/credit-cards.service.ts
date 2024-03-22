@@ -35,9 +35,10 @@ export class CreditCardsService {
     }
   }
 
+  //!Changed to findOne because use findOneOrFail throws an error but in the link use and card if card not exists it is created
   async findByCardNumber(cardNumber: string): Promise<CreditCard> {
     try {
-      const card = await this.creditCardRepository.findOneOrFail({
+      const card = await this.creditCardRepository.findOne({
         where: {
           creditCardNumber: cardNumber,
         },
@@ -62,5 +63,15 @@ export class CreditCardsService {
 
   remove(id: number) {
     return `This action removes a #${id} creditCard`;
+  }
+
+  async deleteAllCards() {
+    try {
+      const query =
+        this.creditCardRepository.createQueryBuilder('credit-cards');
+      return await query.delete().where({}).execute();
+    } catch (error) {
+      ErrorHandler.handleExceptions(error);
+    }
   }
 }

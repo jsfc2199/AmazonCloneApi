@@ -60,7 +60,10 @@ export class User {
   cellphone: string;
 
   //second argument is the field with the relation
-  @ManyToMany(() => CreditCard, (creditCard) => creditCard.user)
+  @ManyToMany(() => CreditCard, (creditCard) => creditCard.user, {
+    cascade: true,
+    eager: true,
+  })
   @JoinTable({
     name: 'users_cards', //table name
     joinColumn: {

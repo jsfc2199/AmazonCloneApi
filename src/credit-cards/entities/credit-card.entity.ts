@@ -22,6 +22,8 @@ export class CreditCard {
   creditCardPass: string;
 
   //second argument is the field with the relation
-  @ManyToMany(() => User, (user) => user.creditCards)
+  @ManyToMany(() => User, (user) => user.creditCards, {
+    onDelete: 'CASCADE',
+  })
   user: User[];
 }

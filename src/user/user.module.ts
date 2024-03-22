@@ -17,5 +17,11 @@ import { UserAddressRelationUseCase } from './use-cases/user-address-relation.us
   ], //needed to be able to use Repository and other TypeORM features inside this module
   controllers: [UserController, UserRelationsController],
   providers: [UserService, UserCardRelationUseCase, UserAddressRelationUseCase],
+  exports: [
+    UserService,
+    TypeOrmModule,
+    UserCardRelationUseCase,
+    UserAddressRelationUseCase,
+  ],
 })
 export class UserModule {}

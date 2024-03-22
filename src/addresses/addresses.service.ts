@@ -30,10 +30,11 @@ export class AddressesService {
     }
   }
 
+  //!Changed to findOne because use findOneOrFail throws an error but in the link use and address if card not exists it is created
   async findByAddressProps(addressDto: UpdateAddressDto) {
     try {
       const { city, country, streetAddress } = addressDto;
-      const address = await this.addressRepository.findOneOrFail({
+      const address = await this.addressRepository.findOne({
         where: {
           city: city.toUpperCase(),
           country: country.toUpperCase(),
@@ -61,5 +62,14 @@ export class AddressesService {
 
   remove(id: number) {
     return `This action removes a #${id} address`;
+  }
+
+  async deleteAllAddresses() {
+    try {
+      const query = this.addressRepository.createQueryBuilder('addresses');
+      return await query.delete().where({}).execute();
+    } catch (error) {
+      ErrorHandler.handleExceptions(error);
+    }
   }
 }

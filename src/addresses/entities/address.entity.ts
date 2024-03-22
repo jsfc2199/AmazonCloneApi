@@ -33,7 +33,9 @@ export class Address {
   })
   streetAddress: string;
 
-  @ManyToMany(() => User, (user) => user.addresses)
+  @ManyToMany(() => User, (user) => user.addresses, {
+    onDelete: 'CASCADE',
+  })
   user: User[];
 
   @BeforeUpdate()

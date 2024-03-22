@@ -90,4 +90,13 @@ export class UserService {
       ErrorHandler.handleExceptions(error);
     }
   }
+
+  async deleteAllUsers() {
+    try {
+      const query = this.userRepository.createQueryBuilder('users');
+      return await query.delete().where({}).execute();
+    } catch (error) {
+      ErrorHandler.handleExceptions(error);
+    }
+  }
 }
