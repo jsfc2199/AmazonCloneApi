@@ -9,6 +9,7 @@ import { CommonModule } from './common/common.module';
 import { CreditCardsModule } from './credit-cards/credit-cards.module';
 import { AddressesModule } from './addresses/addresses.module';
 import { SeedModule } from './seed/seed.module';
+import { ProductModule } from './product/product.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { SeedModule } from './seed/seed.module';
     CreditCardsModule,
     AddressesModule,
     SeedModule,
+    ProductModule,
   ],
   controllers: [AppController],
   providers: [AppService],
