@@ -99,7 +99,7 @@ export class Product {
 
   @Column({
     nullable: false,
-    unique: true,
+    unique: false,
     type: 'boolean',
     default: false,
   })

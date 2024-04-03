@@ -46,8 +46,7 @@ export class CreateProductDto {
   product_page_url: string;
 
   @IsNumber()
-  @IsPositive()
-  @Min(1)
+  @Min(0)
   min_quantity: number;
 
   @IsNumber()
@@ -55,7 +54,7 @@ export class CreateProductDto {
   max_quantity: number;
 
   @IsNumber()
-  @IsPositive()
+  @Min(0)
   quantity: number;
 
   @IsBoolean()
@@ -63,12 +62,12 @@ export class CreateProductDto {
 
   @IsNumber()
   @IsInt()
-  @IsPositive()
+  @Min(0)
   reviews: number;
 
   @IsOptional()
   @IsNumber()
-  @IsPositive()
+  @Min(0)
   rating?: number;
 
   @IsString()

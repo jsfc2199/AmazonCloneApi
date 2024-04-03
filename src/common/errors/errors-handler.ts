@@ -14,9 +14,9 @@ export class ErrorHandler {
       throw new BadRequestException(`Error: ${error.detail}`);
     if (error instanceof EntityNotFoundError) {
       const entityClass = this.extractEntity(error.message);
-      const whereJson = JSON.stringify(error.criteria.where);
+      const whereJson = JSON.stringify(error.criteria);
       throw new NotFoundException(
-        `The requested information for the type class: ${entityClass} with: ${whereJson} was not found`,
+        `The requested information for the type class: ${entityClass} with some of the following properties: ${whereJson} was not found`,
       );
     }
 
