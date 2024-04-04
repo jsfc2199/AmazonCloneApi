@@ -8,6 +8,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserCardRelationUseCase } from '../user/use-cases/user-card-relation.use-case';
 import { UserAddressRelationUseCase } from '../user/use-cases/user-address-relation.use-case';
+import { productData } from './data/product-parcial.data';
+import { Product } from './../product/entities/product.entity';
+import { ProductService } from '../product/product.service';
 
 @Injectable()
 export class SeedService {
@@ -15,16 +18,20 @@ export class SeedService {
     private readonly userService: UserService,
     private readonly addressService: AddressesService,
     private readonly cardService: CreditCardsService,
+    private readonly productService: ProductService,
     private readonly userCardUseCase: UserCardRelationUseCase,
     private readonly userAddressUseCase: UserAddressRelationUseCase,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    @InjectRepository(Product)
+    private readonly productRepository: Repository<Product>,
   ) {}
 
   async runSeed() {
     await this.userService.deleteAllUsers();
     await this.addressService.deleteAllAddresses();
     await this.cardService.deleteAllCards();
+    await this.productService.deleteAllProducts();
 
     const dbUsers = await this.insertUsers();
     const usersIds = dbUsers.map((user) => user.uuid);
@@ -57,6 +64,8 @@ export class SeedService {
       initialData.addresses,
       this.userAddressUseCase.linkUserAndAddress.bind(this.userAddressUseCase),
     );
+
+    this.insertProducts();
     return 'Seed executed';
   }
 
@@ -66,6 +75,16 @@ export class SeedService {
 
     seedUsers.forEach((user) => users.push(this.userRepository.create(user)));
     return await this.userRepository.save(users);
+  }
+
+  private async insertProducts(): Promise<Product[]> {
+    const seedProducts = productData.product_result;
+    const products: Product[] = [];
+
+    seedProducts.forEach((product) =>
+      products.push(this.productRepository.create(product)),
+    );
+    return await this.productRepository.save(products);
   }
 
   private async linkUserWithRelations<T>(

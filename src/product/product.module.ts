@@ -9,5 +9,6 @@ import { ProductUseCase } from './use-cases/product.use-case';
   imports: [TypeOrmModule.forFeature([Product])],
   controllers: [ProductController],
   providers: [ProductService, ProductUseCase],
+  exports: [ProductService, TypeOrmModule],
 })
 export class ProductModule {}

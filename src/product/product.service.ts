@@ -6,6 +6,7 @@ import { Product } from './entities/product.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ErrorHandler } from '../common/errors/errors-handler';
 import { isUUID } from 'validator';
+import { PaginationDto } from '../common/dto/pagination.dto';
 
 @Injectable()
 export class ProductService {
@@ -23,44 +24,94 @@ export class ProductService {
     }
   }
 
-  findAll() {
-    return `This action returns all product`;
-  }
-
-  async findOne(term: string) {
+  async findAll(pagination: PaginationDto) {
     try {
-      if (isUUID(term)) {
-        const product = await this.productRepository.findOneOrFail({
-          where: {
-            uuid: term,
-          },
-        });
-        return product;
-      } else {
-        const productBuilder =
-          this.productRepository.createQueryBuilder('prod');
-        const product = await productBuilder
-          .where(
-            'us_item_id = :us_item_id or product_id = :product_id or offer_id = :offer_id',
-            {
-              us_item_id: term,
-              product_id: term,
-              offer_id: term,
-            },
-          )
-          .getOneOrFail();
-        return product;
-      }
+      const { limit = 10, offset = 0 } = pagination;
+      const allProducts = await this.productRepository.find({
+        take: limit,
+        skip: offset,
+      });
+      return allProducts;
     } catch (error) {
       ErrorHandler.handleExceptions(error);
     }
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`;
+  async findOne(term: string) {
+    let product: Product;
+    try {
+      if (isUUID(term)) {
+        product = await this.productRepository.findOneOrFail({
+          where: {
+            uuid: term,
+          },
+        });
+      } else {
+        product = await this.searchProductByTermDifferentThanUUID(term);
+      }
+      return product;
+    } catch (error) {
+      ErrorHandler.handleExceptions(error);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} product`;
+  /*
+  ! Taking into account that I am assuming infinite products both methods UPDATE and REMOVE are not necessary. 
+  ! Doing it just for practice 
+  */
+
+  async update(term: string, updateProductDto: UpdateProductDto) {
+    let productDB: Product;
+    try {
+      if (isUUID(term)) {
+        productDB = await this.productRepository.preload({
+          uuid: term,
+          ...updateProductDto,
+        });
+      } else {
+        productDB = await this.searchProductByTermDifferentThanUUID(term);
+        Object.assign(productDB, updateProductDto); //!Copy all values from all properties from the source object(update product) to a target object (productDB)
+      }
+      const productUpdated = await this.productRepository.save(productDB);
+      return {
+        productUpdated,
+      };
+    } catch (error) {
+      ErrorHandler.handleExceptions(error);
+    }
+  }
+
+  async remove(term: string) {
+    try {
+      const product = await this.findOne(term);
+      await this.productRepository.remove(product);
+      return product.us_item_id;
+    } catch (error) {
+      ErrorHandler.handleExceptions(error);
+    }
+  }
+
+  private async searchProductByTermDifferentThanUUID(term: string) {
+    const productBuilder = this.productRepository.createQueryBuilder('prod');
+    const productDB = await productBuilder
+      .where(
+        'us_item_id = :us_item_id or product_id = :product_id or offer_id = :offer_id',
+        {
+          us_item_id: term,
+          product_id: term,
+          offer_id: term,
+        },
+      )
+      .getOneOrFail();
+    return productDB;
+  }
+
+  async deleteAllProducts() {
+    try {
+      const query = this.productRepository.createQueryBuilder('users');
+      return await query.delete().where({}).execute();
+    } catch (error) {
+      ErrorHandler.handleExceptions(error);
+    }
   }
 }
