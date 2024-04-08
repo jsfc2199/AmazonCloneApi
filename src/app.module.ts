@@ -10,6 +10,7 @@ import { CreditCardsModule } from './credit-cards/credit-cards.module';
 import { AddressesModule } from './addresses/addresses.module';
 import { SeedModule } from './seed/seed.module';
 import { ProductModule } from './product/product.module';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ProductModule } from './product/product.module';
     AddressesModule,
     SeedModule,
     ProductModule,
+    CategoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
