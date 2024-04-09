@@ -10,6 +10,7 @@ import {
   Min,
 } from 'class-validator';
 import { OfferType } from '../interfaces/offer-type.interface';
+import { Category } from '../../category/entities/category.entity';
 
 export class CreateProductDto {
   @IsNumberString()
@@ -85,4 +86,7 @@ export class CreateProductDto {
   @IsNumber()
   @IsPositive()
   was_price: number;
+
+  @IsOptional()
+  categories?: Category[];
 }

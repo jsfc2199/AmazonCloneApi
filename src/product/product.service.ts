@@ -45,6 +45,9 @@ export class ProductService {
           where: {
             uuid: term,
           },
+          relations: {
+            categories: true,
+          },
         });
       } else {
         product = await this.searchProductByTermDifferentThanUUID(term);
@@ -102,6 +105,7 @@ export class ProductService {
           offer_id: term,
         },
       )
+      .leftJoinAndSelect('prod.categories', 'prodCategories')
       .getOneOrFail();
     return productDB;
   }

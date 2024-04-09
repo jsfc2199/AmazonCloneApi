@@ -1,5 +1,12 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { OfferType } from '../interfaces/offer-type.interface';
+import { Category } from '../../category/entities/category.entity';
 
 @Entity({ name: 'products' })
 export class Product {
@@ -161,8 +168,22 @@ export class Product {
   })
   quantity: number;
 
+  @ManyToMany(() => Category, (category) => category.product, {
+    cascade: true,
+    eager: true,
+  })
+  @JoinTable({
+    name: 'product_categories',
+    joinColumn: {
+      name: 'product_item_id',
+    },
+    inverseJoinColumn: {
+      name: 'category_id',
+    },
+  })
+  categories?: Category[];
+
   //images: string[];
-  //categories: string[];
   //variant_swatches?: VariantSwatch[];
   //specification_highlights: SpecificationHighlight[];
 }

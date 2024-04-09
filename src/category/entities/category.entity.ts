@@ -1,4 +1,11 @@
-import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BeforeUpdate,
+  Column,
+  Entity,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Product } from '../../product/entities/product.entity';
 
 @Entity({ name: 'category' })
 export class Category {
@@ -12,7 +19,12 @@ export class Category {
   })
   category: string;
 
-  @BeforeInsert()
+  @ManyToMany(() => Product, (product) => product.categories, {
+    onDelete: 'CASCADE',
+  })
+  product: Product[];
+
+  @BeforeUpdate()
   capitalize() {
     this.category = this.category.toUpperCase();
   }
