@@ -37,7 +37,7 @@ export class ProductService {
     }
   }
 
-  async findOne(term: string) {
+  async findOne(term: string): Promise<Product> {
     let product: Product;
     try {
       if (isUUID(term)) {
@@ -52,6 +52,7 @@ export class ProductService {
       } else {
         product = await this.searchProductByTermDifferentThanUUID(term);
       }
+      product.categories.sort((a, b) => a.category.localeCompare(b.category));
       return product;
     } catch (error) {
       ErrorHandler.handleExceptions(error);

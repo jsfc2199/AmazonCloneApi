@@ -5,10 +5,17 @@ import { AddressesModule } from '../addresses/addresses.module';
 import { CreditCardsModule } from '../credit-cards/credit-cards.module';
 import { UserModule } from '../user/user.module';
 import { ProductModule } from '../product/product.module';
+import { CategoryModule } from '../category/category.module';
 
 @Module({
   controllers: [SeedController],
   providers: [SeedService],
-  imports: [AddressesModule, CreditCardsModule, UserModule, ProductModule],
+  imports: [
+    AddressesModule,
+    CreditCardsModule,
+    UserModule,
+    ProductModule,
+    CategoryModule,
+  ],
 })
 export class SeedModule {}

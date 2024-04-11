@@ -1,6 +1,7 @@
-import { IsString } from 'class-validator';
+import { IsArray, IsString } from 'class-validator';
 
 export class CreateCategoryDto {
-  @IsString()
-  category: string;
+  @IsString({ each: true })
+  @IsArray()
+  category: string[];
 }

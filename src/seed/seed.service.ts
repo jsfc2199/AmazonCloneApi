@@ -11,6 +11,9 @@ import { UserAddressRelationUseCase } from '../user/use-cases/user-address-relat
 import { productData } from './data/product-parcial.data';
 import { Product } from './../product/entities/product.entity';
 import { ProductService } from '../product/product.service';
+import { ProductCategoryUseCase } from '../product/use-cases/linkProductCategory.use-case';
+import { CategoryService } from '../category/category.service';
+import { CreateCategoryDto } from '../category/dto/create-category.dto';
 
 @Injectable()
 export class SeedService {
@@ -19,8 +22,10 @@ export class SeedService {
     private readonly addressService: AddressesService,
     private readonly cardService: CreditCardsService,
     private readonly productService: ProductService,
+    private readonly categoryService: CategoryService,
     private readonly userCardUseCase: UserCardRelationUseCase,
     private readonly userAddressUseCase: UserAddressRelationUseCase,
+    private readonly productCategoryUseCase: ProductCategoryUseCase,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     @InjectRepository(Product)
@@ -32,6 +37,7 @@ export class SeedService {
     await this.addressService.deleteAllAddresses();
     await this.cardService.deleteAllCards();
     await this.productService.deleteAllProducts();
+    await this.categoryService.deleteAllCategories();
 
     const dbUsers = await this.insertUsers();
     const usersIds = dbUsers.map((user) => user.uuid);
@@ -65,7 +71,19 @@ export class SeedService {
       this.userAddressUseCase.linkUserAndAddress.bind(this.userAddressUseCase),
     );
 
-    this.insertProducts();
+    const dbProducts = await this.insertProducts();
+    const productsIds = dbProducts.map((product) => product.us_item_id);
+    const allCategoriesPerProduct = productData.categoriesPerProduct;
+
+    for await (const id of productsIds) {
+      const categorySeed: CreateCategoryDto = {
+        category: allCategoriesPerProduct[0][id],
+      };
+      await this.productCategoryUseCase.linkProductCategoryUseCase(
+        id,
+        categorySeed,
+      );
+    }
     return 'Seed executed';
   }
 
@@ -98,4 +116,8 @@ export class SeedService {
       linkFunction(randomIdUser, relation);
     });
   }
+
+  // private async linkProductWithCategory():{
+
+  // }
 }

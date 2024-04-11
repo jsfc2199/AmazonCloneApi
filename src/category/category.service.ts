@@ -16,15 +16,22 @@ export class CategoryService {
   ) {}
   async create(createCategoryDto: CreateCategoryDto, product?: Product) {
     try {
-      const categoryToCreate =
-        this.categoryRepository.create(createCategoryDto);
-      const { category } = categoryToCreate;
-      const categoryToSave = await this.categoryRepository.save({
-        ...categoryToCreate,
-        category: category.toUpperCase(),
-        product: [product],
+      const categoriesCreated = createCategoryDto.category.map((category) => {
+        return this.categoryRepository.create({
+          category: category.toUpperCase(),
+        });
       });
-      return categoryToSave;
+
+      const categoriesToSave = categoriesCreated.map((category) => {
+        return {
+          ...category,
+          product: [product],
+        };
+      });
+      const categoriesSaved =
+        await this.categoryRepository.save(categoriesToSave);
+
+      return categoriesSaved;
     } catch (error) {
       ErrorHandler.handleExceptions(error);
     }
@@ -64,5 +71,14 @@ export class CategoryService {
 
   remove(id: number) {
     return `This action removes a #${id} category`;
+  }
+
+  async deleteAllCategories() {
+    try {
+      const query = this.categoryRepository.createQueryBuilder('category');
+      return await query.delete().where({}).execute();
+    } catch (error) {
+      ErrorHandler.handleExceptions(error);
+    }
   }
 }

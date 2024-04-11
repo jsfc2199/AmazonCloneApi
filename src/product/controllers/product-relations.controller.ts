@@ -10,10 +10,13 @@ export class ProductRelationsController {
   ) {}
 
   @Post('category/:term')
-  createProductCategoryRelation(
+  async createProductCategoryRelation(
     @Param('term') term: string,
     @Body() categoryDto: CreateCategoryDto,
   ) {
-    return this.productCategoryUseCase.createProductUseCase(term, categoryDto);
+    return await this.productCategoryUseCase.linkProductCategoryUseCase(
+      term,
+      categoryDto,
+    );
   }
 }
