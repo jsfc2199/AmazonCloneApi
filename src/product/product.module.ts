@@ -7,11 +7,27 @@ import { ProductUseCase } from './use-cases/product.use-case';
 import { ProductRelationsController } from './controllers/product-relations.controller';
 import { ProductCategoryUseCase } from './use-cases/linkProductCategory.use-case';
 import { CategoryModule } from '../category/category.module';
+import { ProductImagesModule } from '../product-images/product-images.module';
+import { ProductImageUseCase } from './use-cases/linkProductImage.use-case';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Product]), CategoryModule],
+  imports: [
+    TypeOrmModule.forFeature([Product]),
+    CategoryModule,
+    ProductImagesModule,
+  ],
   controllers: [ProductController, ProductRelationsController],
-  providers: [ProductService, ProductUseCase, ProductCategoryUseCase],
-  exports: [ProductService, TypeOrmModule, ProductCategoryUseCase],
+  providers: [
+    ProductService,
+    ProductUseCase,
+    ProductCategoryUseCase,
+    ProductImageUseCase,
+  ],
+  exports: [
+    ProductService,
+    TypeOrmModule,
+    ProductCategoryUseCase,
+    ProductImageUseCase,
+  ],
 })
 export class ProductModule {}

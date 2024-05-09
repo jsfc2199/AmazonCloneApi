@@ -11,6 +11,7 @@ import {
 } from 'class-validator';
 import { OfferType } from '../interfaces/offer-type.interface';
 import { Category } from '../../category/entities/category.entity';
+import { ProductImage } from 'src/product-images/entities/product-image.entity';
 
 export class CreateProductDto {
   @IsNumberString()
@@ -89,4 +90,7 @@ export class CreateProductDto {
 
   @IsOptional()
   categories?: Category[];
+
+  @IsOptional()
+  images?: ProductImage[];
 }

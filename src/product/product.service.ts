@@ -47,6 +47,7 @@ export class ProductService {
           },
           relations: {
             categories: true,
+            images: true,
           },
         });
       } else {
@@ -107,6 +108,7 @@ export class ProductService {
         },
       )
       .leftJoinAndSelect('prod.categories', 'prodCategories')
+      .leftJoinAndSelect('prod.images', 'prodImages')
       .getOneOrFail();
     return productDB;
   }

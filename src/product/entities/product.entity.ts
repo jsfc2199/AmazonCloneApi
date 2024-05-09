@@ -3,10 +3,12 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { OfferType } from '../interfaces/offer-type.interface';
 import { Category } from '../../category/entities/category.entity';
+import { ProductImage } from '../../product-images/entities/product-image.entity';
 
 @Entity({ name: 'products' })
 export class Product {
@@ -183,7 +185,10 @@ export class Product {
   })
   categories?: Category[];
 
-  //images: string[];
-  //variant_swatches?: VariantSwatch[];
+  @OneToMany(() => ProductImage, (img) => img.product, {
+    eager: true,
+    cascade: true,
+  })
+  images?: ProductImage[];
   //specification_highlights: SpecificationHighlight[];
 }

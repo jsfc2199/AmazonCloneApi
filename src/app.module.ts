@@ -11,6 +11,7 @@ import { AddressesModule } from './addresses/addresses.module';
 import { SeedModule } from './seed/seed.module';
 import { ProductModule } from './product/product.module';
 import { CategoryModule } from './category/category.module';
+import { ProductImagesModule } from './product-images/product-images.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { CategoryModule } from './category/category.module';
     SeedModule,
     ProductModule,
     CategoryModule,
+    ProductImagesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

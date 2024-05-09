@@ -24,6 +24,6 @@ export interface SeedProductResult {
   quantity: number;
 }
 
-export interface SeedProductCategories {
+export interface SeedProductCategoriesAndImages {
   [productId: string]: string[];
 }

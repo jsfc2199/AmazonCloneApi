@@ -6,6 +6,7 @@ import { CreditCardsModule } from '../credit-cards/credit-cards.module';
 import { UserModule } from '../user/user.module';
 import { ProductModule } from '../product/product.module';
 import { CategoryModule } from '../category/category.module';
+import { ProductImagesModule } from '../product-images/product-images.module';
 
 @Module({
   controllers: [SeedController],
@@ -16,6 +17,7 @@ import { CategoryModule } from '../category/category.module';
     UserModule,
     ProductModule,
     CategoryModule,
+    ProductImagesModule,
   ],
 })
 export class SeedModule {}

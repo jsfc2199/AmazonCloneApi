@@ -14,6 +14,9 @@ import { ProductService } from '../product/product.service';
 import { ProductCategoryUseCase } from '../product/use-cases/linkProductCategory.use-case';
 import { CategoryService } from '../category/category.service';
 import { CreateCategoryDto } from '../category/dto/create-category.dto';
+import { ProductImagesService } from '../product-images/product-images.service';
+import { ProductImageUseCase } from '../product/use-cases/linkProductImage.use-case';
+import { CreateProductImageDto } from '../product-images/dto/create-product-image.dto';
 
 @Injectable()
 export class SeedService {
@@ -23,9 +26,11 @@ export class SeedService {
     private readonly cardService: CreditCardsService,
     private readonly productService: ProductService,
     private readonly categoryService: CategoryService,
+    private readonly productImageService: ProductImagesService,
     private readonly userCardUseCase: UserCardRelationUseCase,
     private readonly userAddressUseCase: UserAddressRelationUseCase,
     private readonly productCategoryUseCase: ProductCategoryUseCase,
+    private readonly productImageUseCase: ProductImageUseCase,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     @InjectRepository(Product)
@@ -38,6 +43,7 @@ export class SeedService {
     await this.cardService.deleteAllCards();
     await this.productService.deleteAllProducts();
     await this.categoryService.deleteAllCategories();
+    // await this.productImageService.deleteAllImages();
 
     const dbUsers = await this.insertUsers();
     const usersIds = dbUsers.map((user) => user.uuid);
@@ -74,15 +80,23 @@ export class SeedService {
     const dbProducts = await this.insertProducts();
     const productsIds = dbProducts.map((product) => product.us_item_id);
     const allCategoriesPerProduct = productData.categoriesPerProduct;
+    const allImagesPerProduct = productData.imagesPerProduct;
 
     for await (const id of productsIds) {
       const categorySeed: CreateCategoryDto = {
         category: allCategoriesPerProduct[0][id],
       };
+
+      const imageSeed: CreateProductImageDto = {
+        images: allImagesPerProduct[0][id],
+      };
+
       await this.productCategoryUseCase.linkProductCategoryUseCase(
         id,
         categorySeed,
       );
+
+      await this.productImageUseCase.linkProductImageUseCase(id, imageSeed);
     }
     return 'Seed executed';
   }
