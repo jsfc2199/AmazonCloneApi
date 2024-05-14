@@ -12,6 +12,7 @@ import { SeedModule } from './seed/seed.module';
 import { ProductModule } from './product/product.module';
 import { CategoryModule } from './category/category.module';
 import { ProductImagesModule } from './product-images/product-images.module';
+import { SpecificationHighlightsModule } from './specification-highlights/specification-highlights.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { ProductImagesModule } from './product-images/product-images.module';
     ProductModule,
     CategoryModule,
     ProductImagesModule,
+    SpecificationHighlightsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
