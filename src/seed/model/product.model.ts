@@ -27,3 +27,16 @@ export interface SeedProductResult {
 export interface SeedProductCategoriesAndImages {
   [productId: string]: string[];
 }
+
+export interface SeedProductSpecificationHighlights {
+  [productId: string]: ProductFeatures;
+}
+
+interface ProductFeatures {
+  feature: string;
+  featureDescription: string;
+  featureDisplayName: string;
+  assembledSpecs: string;
+  assembledDescription: string;
+  assembledDisplayName: string;
+}

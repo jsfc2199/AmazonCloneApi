@@ -4,12 +4,15 @@ import { ProductCategoryUseCase } from '../use-cases/linkProductCategory.use-cas
 import { CreateCategoryDto } from '../../category/dto/create-category.dto';
 import { CreateProductImageDto } from '../../product-images/dto/create-product-image.dto';
 import { ProductImageUseCase } from '../use-cases/linkProductImage.use-case';
+import { ProductSpecificationHighlightUseCase } from '../use-cases/linkProductSpecHigh.use-case';
+import { CreateSpecificationHighlightDto } from '../../specification-highlights/dto/create-specification-highlight.dto';
 
 @Controller('product-relations')
 export class ProductRelationsController {
   constructor(
     private readonly productCategoryUseCase: ProductCategoryUseCase,
     private readonly productImageUseCase: ProductImageUseCase,
+    private readonly productSpecificationHighlightUseCase: ProductSpecificationHighlightUseCase,
   ) {}
 
   @Post('category/:term')
@@ -31,6 +34,17 @@ export class ProductRelationsController {
     return await this.productImageUseCase.linkProductImageUseCase(
       term,
       imageDto,
+    );
+  }
+
+  @Post('specification-highlight/:term')
+  async createProductSpecificationHighlightRelation(
+    @Param('term') term: string,
+    @Body() specHighDto: CreateSpecificationHighlightDto,
+  ) {
+    return await this.productSpecificationHighlightUseCase.linkProductSpecificationHighlightUseCase(
+      term,
+      specHighDto,
     );
   }
 }

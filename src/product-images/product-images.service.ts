@@ -28,11 +28,12 @@ export class ProductImagesService {
       const imagesToSave = imagesCreated.map((image) => {
         return {
           ...image,
-          product,
+          product: [product],
         };
       });
 
       const imagesSaved = await this.imageRepository.save(imagesToSave);
+
       return imagesSaved;
     } catch (error) {
       ErrorHandler.handleExceptions(error);

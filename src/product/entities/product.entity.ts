@@ -4,7 +4,6 @@ import {
   JoinColumn,
   JoinTable,
   ManyToMany,
-  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -188,9 +187,18 @@ export class Product {
   })
   categories?: Category[];
 
-  @OneToMany(() => ProductImage, (img) => img.product, {
+  @ManyToMany(() => ProductImage, (img) => img.product, {
     eager: true,
     cascade: true,
+  })
+  @JoinTable({
+    name: 'product_images',
+    joinColumn: {
+      name: 'product_item_id',
+    },
+    inverseJoinColumn: {
+      name: 'image_id',
+    },
   })
   images?: ProductImage[];
 

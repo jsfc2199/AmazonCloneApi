@@ -8,5 +8,6 @@ import { SpecificationHighlight } from './entities/specification-highlight.entit
   imports: [TypeOrmModule.forFeature([SpecificationHighlight])],
   controllers: [SpecificationHighlightsController],
   providers: [SpecificationHighlightsService],
+  exports: [SpecificationHighlightsService],
 })
 export class SpecificationHighlightsModule {}

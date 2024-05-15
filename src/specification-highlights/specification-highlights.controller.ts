@@ -3,13 +3,13 @@ import {
   Get,
   Post,
   Body,
-  Patch,
+  // Delete,
+  // Patch,
   Param,
-  Delete,
 } from '@nestjs/common';
 import { SpecificationHighlightsService } from './specification-highlights.service';
 import { CreateSpecificationHighlightDto } from './dto/create-specification-highlight.dto';
-import { UpdateSpecificationHighlightDto } from './dto/update-specification-highlight.dto';
+// import { UpdateSpecificationHighlightDto } from './dto/update-specification-highlight.dto';
 
 @Controller('specification-highlights')
 export class SpecificationHighlightsController {
@@ -26,14 +26,14 @@ export class SpecificationHighlightsController {
     );
   }
 
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.specificationHighlightsService.findOne(id);
+  }
+
   // @Get()
   // findAll() {
   //   return this.specificationHighlightsService.findAll();
-  // }
-
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.specificationHighlightsService.findOne(+id);
   // }
 
   // @Patch(':id')

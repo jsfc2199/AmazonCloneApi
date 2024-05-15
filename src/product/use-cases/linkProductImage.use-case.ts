@@ -34,10 +34,27 @@ export class ProductImageUseCase {
 
     if (imageIsNull) {
       const combinesImages: ProductImage[] = [...images, ...allImages.flat()];
+
       response.push({
         productId,
         images: combinesImages.map((img) => img.url),
       });
+      // if (product.us_item_id == '555845428') {
+      //   console.log('555845428', response);
+      //   console.log('-------');
+      // }
+
+      // if (product.us_item_id == '468424924') {
+      //   console.log('468424924', response);
+      //   console.log('-------');
+      // }
+      if (product.us_item_id == '555845428') {
+        console.log(response);
+      }
+
+      if (product.us_item_id == '468424924') {
+        console.log(response);
+      }
       return response;
     }
 
@@ -61,6 +78,7 @@ export class ProductImageUseCase {
     product: Product,
   ) {
     const { images } = product;
+
     const imagesFoundInReq = await Promise.all(
       createImageDto.images.map(async (image) => {
         return await this.productImagesService.findOne(image);

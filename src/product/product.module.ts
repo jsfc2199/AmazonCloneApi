@@ -9,12 +9,15 @@ import { ProductCategoryUseCase } from './use-cases/linkProductCategory.use-case
 import { CategoryModule } from '../category/category.module';
 import { ProductImagesModule } from '../product-images/product-images.module';
 import { ProductImageUseCase } from './use-cases/linkProductImage.use-case';
+import { SpecificationHighlightsModule } from '../specification-highlights/specification-highlights.module';
+import { ProductSpecificationHighlightUseCase } from './use-cases/linkProductSpecHigh.use-case';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Product]),
     CategoryModule,
     ProductImagesModule,
+    SpecificationHighlightsModule,
   ],
   controllers: [ProductController, ProductRelationsController],
   providers: [
@@ -22,12 +25,14 @@ import { ProductImageUseCase } from './use-cases/linkProductImage.use-case';
     ProductUseCase,
     ProductCategoryUseCase,
     ProductImageUseCase,
+    ProductSpecificationHighlightUseCase,
   ],
   exports: [
     ProductService,
     TypeOrmModule,
     ProductCategoryUseCase,
     ProductImageUseCase,
+    ProductSpecificationHighlightUseCase,
   ],
 })
 export class ProductModule {}
