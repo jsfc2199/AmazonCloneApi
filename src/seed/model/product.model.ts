@@ -32,7 +32,7 @@ export interface SeedProductSpecificationHighlights {
   [productId: string]: ProductFeatures;
 }
 
-interface ProductFeatures {
+export interface ProductFeatures {
   feature: string;
   featureDescription: string;
   featureDisplayName: string;

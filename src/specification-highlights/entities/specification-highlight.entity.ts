@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Product } from 'src/product/entities/product.entity';
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class SpecificationHighlight {
@@ -46,4 +47,9 @@ export class SpecificationHighlight {
     unique: false,
   })
   assembledDisplayName: string;
+
+  @OneToOne(() => Product, (product) => product.specificationHighlights, {
+    onDelete: 'CASCADE',
+  })
+  product: Product;
 }

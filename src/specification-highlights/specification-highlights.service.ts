@@ -6,6 +6,7 @@ import { SpecificationHighlight } from './entities/specification-highlight.entit
 import { Repository } from 'typeorm';
 import { ErrorHandler } from 'src/common/errors/errors-handler';
 import { isUUID } from 'validator';
+import { Product } from '../product/entities/product.entity';
 
 @Injectable()
 export class SpecificationHighlightsService {
@@ -15,16 +16,20 @@ export class SpecificationHighlightsService {
   ) {}
   async create(
     createSpecificationHighlightDto: CreateSpecificationHighlightDto,
+    product?: Product,
   ) {
     try {
       const specificationHighlights =
         this.specificationHighlightRepository.create(
           createSpecificationHighlightDto,
         );
+
       const specificationHighlightsToSave =
-        await this.specificationHighlightRepository.save(
-          specificationHighlights,
-        );
+        await this.specificationHighlightRepository.save({
+          ...specificationHighlights,
+          product,
+        });
+
       return specificationHighlightsToSave;
     } catch (error) {
       ErrorHandler.handleExceptions(error);

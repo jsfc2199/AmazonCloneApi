@@ -202,7 +202,10 @@ export class Product {
   })
   images?: ProductImage[];
 
-  @OneToOne(() => SpecificationHighlight)
+  @OneToOne(() => SpecificationHighlight, (spec) => spec.product, {
+    cascade: true,
+    eager: true,
+  })
   @JoinColumn()
   specificationHighlights: SpecificationHighlight;
 }
