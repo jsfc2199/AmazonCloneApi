@@ -80,13 +80,7 @@ export class ProductService {
         Object.assign(productDB, updateProductDto); //!Copy all values from all properties from the source object(update product) to a target object (productDB)
       }
       const productUpdated = await this.productRepository.save(productDB);
-      // if (productDB.us_item_id == '555845428') {
-      //   console.log(productUpdated);
-      // }
 
-      // if (productDB.us_item_id == '468424924') {
-      //   console.log(productUpdated);
-      // }
       return {
         productUpdated,
       };

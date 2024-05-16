@@ -39,22 +39,7 @@ export class ProductImageUseCase {
         productId,
         images: combinesImages.map((img) => img.url),
       });
-      // if (product.us_item_id == '555845428') {
-      //   console.log('555845428', response);
-      //   console.log('-------');
-      // }
 
-      // if (product.us_item_id == '468424924') {
-      //   console.log('468424924', response);
-      //   console.log('-------');
-      // }
-      if (product.us_item_id == '555845428') {
-        console.log(response);
-      }
-
-      if (product.us_item_id == '468424924') {
-        console.log(response);
-      }
       return response;
     }
 
