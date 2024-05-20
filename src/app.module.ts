@@ -13,6 +13,7 @@ import { ProductModule } from './product/product.module';
 import { CategoryModule } from './category/category.module';
 import { ProductImagesModule } from './product-images/product-images.module';
 import { SpecificationHighlightsModule } from './specification-highlights/specification-highlights.module';
+import { RatingModule } from './rating/rating.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { SpecificationHighlightsModule } from './specification-highlights/specif
     CategoryModule,
     ProductImagesModule,
     SpecificationHighlightsModule,
+    RatingModule,
   ],
   controllers: [AppController],
   providers: [AppService],
