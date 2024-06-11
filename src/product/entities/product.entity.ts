@@ -11,6 +11,7 @@ import { OfferType } from '../interfaces/offer-type.interface';
 import { Category } from '../../category/entities/category.entity';
 import { ProductImage } from '../../product-images/entities/product-image.entity';
 import { SpecificationHighlight } from '../../specification-highlights/entities/specification-highlight.entity';
+import { CustomerReview } from '../../customer-reviews/entities/customer-review.entity';
 
 @Entity({ name: 'products' })
 export class Product {
@@ -208,4 +209,23 @@ export class Product {
   })
   @JoinColumn()
   specificationHighlights: SpecificationHighlight;
+
+  @ManyToMany(
+    () => CustomerReview,
+    (customerReview) => customerReview.product,
+    {
+      eager: true,
+      cascade: true,
+    },
+  )
+  @JoinTable({
+    name: 'product_customer_review',
+    joinColumn: {
+      name: 'product_item_id',
+    },
+    inverseJoinColumn: {
+      name: 'customer_review_id',
+    },
+  })
+  customerReviews: CustomerReview[];
 }

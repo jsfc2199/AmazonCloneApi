@@ -1,8 +1,8 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Rating } from './rating.entity';
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Product } from '../../product/entities/product.entity';
 
 @Entity()
-export class Review {
+export class CustomerReview {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -41,9 +41,8 @@ export class Review {
   })
   user_nickname: string;
 
-  //relación entre rating y review
-  @ManyToOne(() => Rating, (rating) => rating.customer_reviews, {
+  @ManyToMany(() => Product, (product) => product.customerReviews, {
     onDelete: 'CASCADE',
   })
-  productRating: Rating;
+  product: Product[];
 }

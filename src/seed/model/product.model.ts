@@ -40,3 +40,21 @@ export interface ProductFeatures {
   assembledDescription: string;
   assembledDisplayName: string;
 }
+
+export interface ProductCustomerReview {
+  rating?: number;
+  count: number;
+  customer_reviews?: CustomerReview[];
+}
+
+export interface CustomerReview {
+  title?: string;
+  text?: string;
+  rating: number;
+  review_submission_time: string;
+  user_nickname?: string;
+}
+
+export interface SeedProductCustomerReview {
+  [productId: string]: ProductCustomerReview;
+}
