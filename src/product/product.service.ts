@@ -49,6 +49,7 @@ export class ProductService {
             categories: true,
             images: true,
             specificationHighlights: true,
+            customerReviews: true,
           },
         });
       } else {
@@ -116,6 +117,7 @@ export class ProductService {
         'prod.specificationHighlights',
         'prodSpecificationHighlights',
       )
+      .leftJoinAndSelect('prod.CustomerReviews', 'prodCustomerReviews')
       .getOneOrFail();
     return productDB;
   }

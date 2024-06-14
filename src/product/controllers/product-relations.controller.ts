@@ -6,6 +6,8 @@ import { CreateProductImageDto } from '../../product-images/dto/create-product-i
 import { ProductImageUseCase } from '../use-cases/linkProductImage.use-case';
 import { ProductSpecificationHighlightUseCase } from '../use-cases/linkProductSpecHigh.use-case';
 import { CreateSpecificationHighlightDto } from '../../specification-highlights/dto/create-specification-highlight.dto';
+import { CreateCustomerReviewsDto } from '../../customer-reviews/dto/create-customer-review.dto';
+import { ProductCustomerReviewsUseCase } from '../use-cases/linkProductCustomerReviews.use-case';
 
 @Controller('product-relations')
 export class ProductRelationsController {
@@ -13,6 +15,7 @@ export class ProductRelationsController {
     private readonly productCategoryUseCase: ProductCategoryUseCase,
     private readonly productImageUseCase: ProductImageUseCase,
     private readonly productSpecificationHighlightUseCase: ProductSpecificationHighlightUseCase,
+    private readonly productCustomerReviewsUseCase: ProductCustomerReviewsUseCase,
   ) {}
 
   @Post('category/:term')
@@ -45,6 +48,17 @@ export class ProductRelationsController {
     return await this.productSpecificationHighlightUseCase.linkProductSpecificationHighlightUseCase(
       term,
       specHighDto,
+    );
+  }
+
+  @Post('customer-reviews/:term')
+  async createProductCustomerReviewRelation(
+    @Param('term') term: string,
+    @Body() customerReviews: CreateCustomerReviewsDto,
+  ) {
+    return await this.productCustomerReviewsUseCase.linkProductCustomerReviewUseCase(
+      term,
+      customerReviews,
     );
   }
 }

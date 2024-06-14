@@ -9,7 +9,10 @@ import {
   ParseUUIDPipe,
 } from '@nestjs/common';
 import { CustomerReviewsService } from './customer-reviews.service';
-import { CreateCustomerReviewDto, CreateCustomerReviewsDto } from './dto/create-customer-review.dto';
+import {
+  CreateCustomerReviewDto,
+  CreateCustomerReviewsDto,
+} from './dto/create-customer-review.dto';
 import { UpdateCustomerReviewDto } from './dto/update-customer-review.dto';
 
 @Controller('customer-reviews')
@@ -36,6 +39,12 @@ export class CustomerReviewsController {
   @Get(':id')
   findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.customerReviewsService.findOne(id);
+  }
+
+  @Get('nano/:nanoid')
+  findByNano(@Param('nanoid') nanoid: string) {
+    const encodedNanoId = encodeURIComponent(nanoid);
+    return this.customerReviewsService.findByNano(encodedNanoId);
   }
 
   @Patch(':id')

@@ -11,6 +11,8 @@ import { ProductImagesModule } from '../product-images/product-images.module';
 import { ProductImageUseCase } from './use-cases/linkProductImage.use-case';
 import { SpecificationHighlightsModule } from '../specification-highlights/specification-highlights.module';
 import { ProductSpecificationHighlightUseCase } from './use-cases/linkProductSpecHigh.use-case';
+import { ProductCustomerReviewsUseCase } from './use-cases/linkProductCustomerReviews.use-case';
+import { CustomerReviewsModule } from 'src/customer-reviews/customer-reviews.module';
 
 @Module({
   imports: [
@@ -18,6 +20,7 @@ import { ProductSpecificationHighlightUseCase } from './use-cases/linkProductSpe
     CategoryModule,
     ProductImagesModule,
     SpecificationHighlightsModule,
+    CustomerReviewsModule,
   ],
   controllers: [ProductController, ProductRelationsController],
   providers: [
@@ -26,6 +29,7 @@ import { ProductSpecificationHighlightUseCase } from './use-cases/linkProductSpe
     ProductCategoryUseCase,
     ProductImageUseCase,
     ProductSpecificationHighlightUseCase,
+    ProductCustomerReviewsUseCase,
   ],
   exports: [
     ProductService,
@@ -33,6 +37,7 @@ import { ProductSpecificationHighlightUseCase } from './use-cases/linkProductSpe
     ProductCategoryUseCase,
     ProductImageUseCase,
     ProductSpecificationHighlightUseCase,
+    ProductCustomerReviewsUseCase,
   ],
 })
 export class ProductModule {}

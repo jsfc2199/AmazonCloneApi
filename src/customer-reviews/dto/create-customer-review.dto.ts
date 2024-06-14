@@ -6,6 +6,7 @@ export class CreateCustomerReviewDto {
   title?: string;
 
   @IsString()
+  @IsOptional()
   text: string;
 
   @IsNumber()
@@ -15,7 +16,12 @@ export class CreateCustomerReviewDto {
   review_submission_time: string;
 
   @IsString()
+  @IsOptional()
   user_nickname: string;
+
+  @IsString()
+  @IsOptional()
+  nanoid: string;
 }
 
 export class CreateCustomerReviewsDto {

@@ -12,6 +12,7 @@ import {
 import { OfferType } from '../interfaces/offer-type.interface';
 import { Category } from '../../category/entities/category.entity';
 import { ProductImage } from 'src/product-images/entities/product-image.entity';
+import { CustomerReview } from '../../customer-reviews/entities/customer-review.entity';
 
 export class CreateProductDto {
   @IsNumberString()
@@ -93,4 +94,7 @@ export class CreateProductDto {
 
   @IsOptional()
   images?: ProductImage[];
+
+  @IsOptional()
+  customerReviews: CustomerReview[];
 }

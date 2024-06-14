@@ -1,4 +1,10 @@
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BeforeInsert,
+  Column,
+  Entity,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Product } from '../../product/entities/product.entity';
 
 @Entity()
@@ -18,7 +24,7 @@ export class CustomerReview {
     nullable: true,
     unique: false,
   })
-  text: string;
+  text?: string;
 
   @Column({
     type: 'float',
@@ -39,10 +45,26 @@ export class CustomerReview {
     nullable: true,
     unique: false,
   })
-  user_nickname: string;
+  user_nickname?: string;
+
+  @Column({
+    type: 'text',
+    nullable: false,
+    unique: true,
+  })
+  nanoid?: string;
 
   @ManyToMany(() => Product, (product) => product.customerReviews, {
     onDelete: 'CASCADE',
   })
   product: Product[];
+
+  @BeforeInsert()
+  async generateNanoid() {
+    const { customAlphabet } = await import('nanoid');
+    const alphabet =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const nanoid = customAlphabet(alphabet, 20);
+    if (!this.nanoid) this.nanoid = nanoid(20);
+  }
 }
