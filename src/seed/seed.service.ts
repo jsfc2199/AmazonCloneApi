@@ -21,6 +21,9 @@ import { SpecificationHighlightsService } from '../specification-highlights/spec
 import { ProductSpecificationHighlightUseCase } from '../product/use-cases/linkProductSpecHigh.use-case';
 import { SpecificationHighlight } from '../specification-highlights/entities/specification-highlight.entity';
 import { CreateSpecificationHighlightDto } from '../specification-highlights/dto/create-specification-highlight.dto';
+import { ProductCustomerReviewsUseCase } from 'src/product/use-cases/linkProductCustomerReviews.use-case';
+import { CustomerReviewsService } from '../customer-reviews/customer-reviews.service';
+import { CreateCustomerReviewsDto } from '../customer-reviews/dto/create-customer-review.dto';
 
 @Injectable()
 export class SeedService {
@@ -32,11 +35,13 @@ export class SeedService {
     private readonly categoryService: CategoryService,
     private readonly productImageService: ProductImagesService,
     private readonly specificationHighlightService: SpecificationHighlightsService,
+    private readonly customerReviewsService: CustomerReviewsService,
     private readonly userCardUseCase: UserCardRelationUseCase,
     private readonly userAddressUseCase: UserAddressRelationUseCase,
     private readonly productCategoryUseCase: ProductCategoryUseCase,
     private readonly productImageUseCase: ProductImageUseCase,
     private readonly productSpecificationHighlightUseCase: ProductSpecificationHighlightUseCase,
+    private readonly productCustomerReviewsUse: ProductCustomerReviewsUseCase,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     @InjectRepository(Product)
@@ -51,6 +56,7 @@ export class SeedService {
     await this.categoryService.deleteAllCategories();
     await this.productImageService.deleteAllImages();
     await this.specificationHighlightService.deleteAllSpecHighlights();
+    await this.customerReviewsService.deleteAllCustomerReviews();
 
     const dbUsers = await this.insertUsers();
     const usersIds = dbUsers.map((user) => user.uuid);
@@ -90,6 +96,7 @@ export class SeedService {
     const allImagesPerProduct = productData.imagesPerProduct;
     const allSpecificationHighlightsPerProduct =
       productData.specificationHighlightsPerProduct;
+    const allCustomerReviewsPerProduct = productData.customerReviewsPerProduct;
 
     for await (const id of productsIds) {
       const categorySeed: CreateCategoryDto = {
@@ -103,6 +110,10 @@ export class SeedService {
       const specificationHighlight: CreateSpecificationHighlightDto =
         allSpecificationHighlightsPerProduct[0][id];
 
+      const customerReviews: CreateCustomerReviewsDto = {
+        customerReviews: allCustomerReviewsPerProduct[0][id],
+      };
+
       await this.productCategoryUseCase.linkProductCategoryUseCase(
         id,
         categorySeed,
@@ -113,6 +124,11 @@ export class SeedService {
       await this.productSpecificationHighlightUseCase.linkProductSpecificationHighlightUseCase(
         id,
         specificationHighlight,
+      );
+
+      await this.productCustomerReviewsUse.linkProductCustomerReviewUseCase(
+        id,
+        customerReviews,
       );
     }
     return 'Seed executed';

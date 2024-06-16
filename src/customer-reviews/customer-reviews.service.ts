@@ -6,8 +6,9 @@ import {
 import { UpdateCustomerReviewDto } from './dto/update-customer-review.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CustomerReview } from './entities/customer-review.entity';
-import { FindOptionsWhere, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Product } from '../product/entities/product.entity';
+import { ErrorHandler } from 'src/common/errors/errors-handler';
 
 @Injectable()
 export class CustomerReviewsService {
@@ -35,10 +36,11 @@ export class CustomerReviewsService {
     createCustomerReviewsDto: CreateCustomerReviewsDto,
     product?: Product,
   ) {
-    const customerReviewsCreated =
-      createCustomerReviewsDto.customer_reviews.map((customerReview) => {
+    const customerReviewsCreated = createCustomerReviewsDto.customerReviews.map(
+      (customerReview) => {
         return this.customerReviewRepository.create(customerReview);
-      });
+      },
+    );
 
     const customerReviewsToSave = customerReviewsCreated.map(
       (customerReview) => {
@@ -95,5 +97,15 @@ export class CustomerReviewsService {
 
   remove(id: number) {
     return `This action removes a #${id} customerReview`;
+  }
+
+  async deleteAllCustomerReviews() {
+    try {
+      const query =
+        this.customerReviewRepository.createQueryBuilder('customerReviews');
+      return await query.delete().where({}).execute();
+    } catch (error) {
+      ErrorHandler.handleExceptions(error);
+    }
   }
 }

@@ -7,7 +7,7 @@ export class CreateCustomerReviewDto {
 
   @IsString()
   @IsOptional()
-  text: string;
+  text?: string;
 
   @IsNumber()
   rating: number;
@@ -17,14 +17,14 @@ export class CreateCustomerReviewDto {
 
   @IsString()
   @IsOptional()
-  user_nickname: string;
+  user_nickname?: string;
 
   @IsString()
   @IsOptional()
-  nanoid: string;
+  nanoid?: string;
 }
 
 export class CreateCustomerReviewsDto {
   @IsOptional()
-  customer_reviews: CreateCustomerReviewDto[];
+  customerReviews: CreateCustomerReviewDto[];
 }

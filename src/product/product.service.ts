@@ -101,6 +101,7 @@ export class ProductService {
   }
 
   private async searchProductByTermDifferentThanUUID(term: string) {
+    // TODO cambiar sin usar queryBuilder y probar
     const productBuilder = this.productRepository.createQueryBuilder('prod');
     const productDB = await productBuilder
       .where(
@@ -117,7 +118,7 @@ export class ProductService {
         'prod.specificationHighlights',
         'prodSpecificationHighlights',
       )
-      .leftJoinAndSelect('prod.CustomerReviews', 'prodCustomerReviews')
+      .leftJoinAndSelect('prod.customerReviews', 'prodCustomerReviews')
       .getOneOrFail();
     return productDB;
   }

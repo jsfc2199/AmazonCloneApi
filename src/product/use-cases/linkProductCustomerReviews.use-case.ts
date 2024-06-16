@@ -95,12 +95,12 @@ export class ProductCustomerReviewsUseCase {
     const allCustomerReviews: CustomerReview[] = [];
     let customerReviewIsNull = false;
 
-    for await (const customerReview of customersReviews.customer_reviews) {
+    for await (const customerReview of customersReviews.customerReviews) {
       const doesCustomerReviewExists =
         await this.customerReviewService.findByNano(customerReview.nanoid);
 
       const customerReviewsDto: CreateCustomerReviewsDto = {
-        customer_reviews: [customerReview],
+        customerReviews: [customerReview],
       };
 
       if (!doesCustomerReviewExists) {
@@ -127,7 +127,7 @@ export class ProductCustomerReviewsUseCase {
     const { customerReviews } = product;
 
     const customerReviewsFound = await Promise.all(
-      customersReviews.customer_reviews.map(async (customerReview) => {
+      customersReviews.customerReviews.map(async (customerReview) => {
         return await this.customerReviewService.findByNano(
           customerReview.nanoid,
         );

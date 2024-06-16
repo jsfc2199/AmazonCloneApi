@@ -8,6 +8,7 @@ import { ProductModule } from '../product/product.module';
 import { CategoryModule } from '../category/category.module';
 import { ProductImagesModule } from '../product-images/product-images.module';
 import { SpecificationHighlightsModule } from '../specification-highlights/specification-highlights.module';
+import { CustomerReviewsModule } from '../customer-reviews/customer-reviews.module';
 
 @Module({
   controllers: [SeedController],
@@ -20,6 +21,7 @@ import { SpecificationHighlightsModule } from '../specification-highlights/speci
     CategoryModule,
     ProductImagesModule,
     SpecificationHighlightsModule,
+    CustomerReviewsModule,
   ],
 })
 export class SeedModule {}

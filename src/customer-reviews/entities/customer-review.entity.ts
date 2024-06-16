@@ -17,7 +17,7 @@ export class CustomerReview {
     nullable: true,
     unique: false,
   })
-  title: string;
+  title?: string;
 
   @Column({
     type: 'text',

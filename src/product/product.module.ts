@@ -12,7 +12,7 @@ import { ProductImageUseCase } from './use-cases/linkProductImage.use-case';
 import { SpecificationHighlightsModule } from '../specification-highlights/specification-highlights.module';
 import { ProductSpecificationHighlightUseCase } from './use-cases/linkProductSpecHigh.use-case';
 import { ProductCustomerReviewsUseCase } from './use-cases/linkProductCustomerReviews.use-case';
-import { CustomerReviewsModule } from 'src/customer-reviews/customer-reviews.module';
+import { CustomerReviewsModule } from '../customer-reviews/customer-reviews.module';
 
 @Module({
   imports: [
