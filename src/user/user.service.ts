@@ -6,7 +6,7 @@ import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { ErrorHandler } from '../common/errors/errors-handler';
-import { PaginationDto } from '../common/dto/pagination.dto';
+import { PaginationCriteriaDto } from '../common/dto/pagination.dto';
 
 @Injectable()
 export class UserService {
@@ -31,7 +31,7 @@ export class UserService {
     }
   }
 
-  async findAll(pagination: PaginationDto) {
+  async findAll(pagination: PaginationCriteriaDto) {
     try {
       const { limit, offset } = pagination;
       const allUsers = await this.userRepository.find({

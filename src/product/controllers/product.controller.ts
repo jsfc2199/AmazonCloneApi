@@ -12,7 +12,7 @@ import { ProductService } from '../product.service';
 import { CreateProductDto } from '../dto/create-product.dto';
 import { UpdateProductDto } from '../dto/update-product.dto';
 import { ProductUseCase } from '../use-cases/product.use-case';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { PaginationCriteriaDto } from 'src/common/dto/pagination.dto';
 
 @Controller('product')
 export class ProductController {
@@ -27,8 +27,18 @@ export class ProductController {
   }
 
   @Get()
-  findAll(@Query() pagination?: PaginationDto) {
+  findAll(@Query() pagination?: PaginationCriteriaDto) {
     return this.productService.findAll(pagination);
+  }
+
+  @Get('criteria')
+  findByCriteria(@Query() paginationCriteria?: PaginationCriteriaDto) {
+    return this.productService.findByCriteria(paginationCriteria);
+  }
+
+  @Get('random')
+  findByRandom(@Query() paginationCriteria?: PaginationCriteriaDto) {
+    return this.productService.fetchRandom(paginationCriteria);
   }
 
   @Get(':term')

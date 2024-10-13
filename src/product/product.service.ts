@@ -6,7 +6,7 @@ import { Product } from './entities/product.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ErrorHandler } from '../common/errors/errors-handler';
 import { isUUID } from 'validator';
-import { PaginationDto } from '../common/dto/pagination.dto';
+import { PaginationCriteriaDto } from '../common/dto/pagination.dto';
 
 @Injectable()
 export class ProductService {
@@ -24,7 +24,7 @@ export class ProductService {
     }
   }
 
-  async findAll(pagination: PaginationDto) {
+  async findAll(pagination: PaginationCriteriaDto) {
     try {
       const { limit = 10, offset = 0 } = pagination;
       const allProducts = await this.productRepository.find({
@@ -35,6 +35,42 @@ export class ProductService {
     } catch (error) {
       ErrorHandler.handleExceptions(error);
     }
+  }
+
+  async findByCriteria(paginationCriteria: PaginationCriteriaDto) {
+    try {
+      const productBuilder = this.productRepository.createQueryBuilder('prod');
+      const { limit = 10, offset = 0, criteria, filter } = paginationCriteria;
+
+      const isPriceCriteria = criteria === 'price';
+      const filterCondition =
+        isPriceCriteria && filter < 50 ? '< :filter' : '> :filter';
+      const orderDirection = isPriceCriteria && filter < 50 ? 'ASC' : 'DESC';
+
+      productBuilder
+        .where(`${criteria} ${filterCondition}`, { filter })
+        .orderBy(`${criteria}`, orderDirection)
+        .take(limit)
+        .skip(offset);
+
+      return await productBuilder.getMany();
+    } catch (error) {
+      ErrorHandler.handleExceptions(error);
+    }
+  }
+
+  //TODO: Mejorar para usar ORM
+  async fetchRandom(pagination: PaginationCriteriaDto) {
+    const { limit = 10, offset = 0 } = pagination;
+
+    const randomProducts = await this.productRepository
+      .createQueryBuilder('product')
+      .orderBy('RANDOM()') // Para PostgreSQL
+      .skip(offset)
+      .take(limit)
+      .getMany();
+
+    return randomProducts;
   }
 
   async findOne(term: string): Promise<Product> {

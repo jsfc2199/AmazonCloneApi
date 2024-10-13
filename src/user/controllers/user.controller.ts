@@ -12,7 +12,7 @@ import {
 import { UserService } from '../user.service';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
-import { PaginationDto } from '../../common/dto/pagination.dto';
+import { PaginationCriteriaDto } from '../../common/dto/pagination.dto';
 
 @Controller('user')
 export class UserController {
@@ -24,7 +24,7 @@ export class UserController {
   }
 
   @Get()
-  findAll(@Query() pagination?: PaginationDto) {
+  findAll(@Query() pagination?: PaginationCriteriaDto) {
     return this.userService.findAll(pagination);
   }
 
