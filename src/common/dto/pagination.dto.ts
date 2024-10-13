@@ -1,7 +1,7 @@
 import { Type } from 'class-transformer';
-import { IsOptional, IsPositive } from 'class-validator';
+import { IsOptional, IsPositive, IsString } from 'class-validator';
 
-export class PaginationDto {
+export class PaginationCriteriaDto {
   @IsOptional()
   @IsPositive()
   @Type(() => Number)
@@ -11,4 +11,13 @@ export class PaginationDto {
   @IsPositive()
   @Type(() => Number)
   offset?: number;
+
+  @IsOptional()
+  @IsPositive()
+  @Type(() => Number)
+  filter?: number;
+
+  @IsString()
+  @IsOptional()
+  criteria?: string;
 }
