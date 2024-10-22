@@ -3,6 +3,8 @@ import { ProductService } from '../product.service';
 import { CreateProductDto } from '../dto/create-product.dto';
 import { UpdateProductDto } from '../dto/update-product.dto';
 import { PaginationCriteriaDto } from 'src/common/dto/pagination.dto';
+import { ProductRandomCriteria } from '../interfaces/products-random-criteria.interface';
+import { Product } from '../entities/product.entity';
 
 @Injectable()
 export class ProductUseCase {
@@ -17,10 +19,9 @@ export class ProductUseCase {
     return this.productService.create(createProductDto);
   }
 
-  //TODO: Fetch random and criteria use cases
   async getProductsByCriteriaUseCase(
     paginationCriteria: PaginationCriteriaDto,
-  ) {
+  ): Promise<ProductRandomCriteria[]> {
     const { limit = 10, criteria, filter } = paginationCriteria;
 
     const { filterCondition, orderDirection } = this.getFilteredCondition(
@@ -28,14 +29,27 @@ export class ProductUseCase {
       filter,
     );
 
-    return this.productService.findByCriteria(
+    const products = await this.productService.findByCriteria(
       limit,
       filterCondition,
       orderDirection,
       criteria,
       filter,
     );
+
+    return this.productImageResponseMapper(products);
   }
+
+  async getRandomProductsUseCase(
+    pagination: PaginationCriteriaDto,
+  ): Promise<ProductRandomCriteria[]> {
+    const { limit = 10 } = pagination;
+
+    const products = await this.productService.fetchRandom(limit);
+
+    return this.productImageResponseMapper(products);
+  }
+
   async updateProductUseCase(id: string, updateProductDto: UpdateProductDto) {
     const productDB = await this.productService.findOne(id);
     const { max_quantity, was_price } = productDB;
@@ -85,5 +99,22 @@ export class ProductUseCase {
       isPriceCriteria && filter < 50 ? 'ASC' : 'DESC';
 
     return { filterCondition, orderDirection };
+  }
+
+  private productImageResponseMapper(
+    products: Product[],
+  ): ProductRandomCriteria[] {
+    const productsMap = products.map((product) => {
+      return {
+        uuid: product.uuid,
+        title: product.title,
+        price: product.price,
+        rating: product.rating,
+        reviews: product.reviews,
+        images: product.images.length > 0 ? [product.images[0].url] : [],
+      };
+    });
+
+    return productsMap;
   }
 }

@@ -21,7 +21,8 @@
     "typeorm": "node --conditions=typescript -r ts-node/register -r tsconfig-paths/register ./node_modules/typeorm/cli.js -d ormconfig",
     "typeorm:migrate": "npm run typeorm -- migration:run",
     "typeorm:revert": "npm run typeorm -- migration:revert",
-    "typeorm:generate": "npm run typeorm -- migration:generate"
+    "typeorm:generate": "npm run typeorm -- migration:generate",
+    "commit": "node scripts/git-commit.js"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",

@@ -38,7 +38,7 @@ export class ProductController {
 
   @Get('random')
   findByRandom(@Query() paginationCriteria?: PaginationCriteriaDto) {
-    return this.productService.fetchRandom(paginationCriteria);
+    return this.productUseCase.getRandomProductsUseCase(paginationCriteria);
   }
 
   @Get(':term')

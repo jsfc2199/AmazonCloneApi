@@ -1,7 +1,7 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Product } from './entities/product.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ErrorHandler } from '../common/errors/errors-handler';
@@ -70,10 +70,8 @@ export class ProductService {
     }
   }
 
-  async fetchRandom(pagination: PaginationCriteriaDto) {
+  async fetchRandom(limit: number) {
     try {
-      const { limit = 10 } = pagination;
-
       const idsDB = await this.productRepository
         .createQueryBuilder('prod')
         .select('prod.uuid')
@@ -186,45 +184,19 @@ export class ProductService {
     }
   }
 
-  private getFilteredCondition(criteria: string, filter: number) {
-    const criteriaWhitelist = ['price', 'rating', 'reviews'];
-    const criteriaFix = criteria.toLowerCase().trim();
-
-    if (!criteriaWhitelist.includes(criteriaFix)) {
-      throw new BadRequestException(
-        `Criteria: '${criteria}' not allowed. Should be 'price', 'rating', 'reviews'`,
-      );
-    }
-    const isPriceCriteria = criteria === 'price';
-
-    const filterCondition =
-      isPriceCriteria && filter < 50 ? '< :filter' : '> :filter';
-
-    const orderDirection: 'ASC' | 'DESC' =
-      isPriceCriteria && filter < 50 ? 'ASC' : 'DESC';
-
-    return { filterCondition, orderDirection };
-  }
-
   private async getProductsByIdsAndCriteria(
     ids: string[],
     criteria?: string,
     orderDirection?: 'ASC' | 'DESC',
-  ) {
-    let query = this.productRepository
-      .createQueryBuilder('prod')
-      .leftJoinAndSelect('prod.categories', 'prodCategories')
-      .leftJoinAndSelect('prod.images', 'prodImages')
-      .leftJoinAndSelect(
-        'prod.specificationHighlights',
-        'prodSpecificationHighlights',
-      )
-      .leftJoinAndSelect('prod.customerReviews', 'prodCustomerReviews')
-      .where('prod.uuid IN (:...ids)', { ids });
+  ): Promise<Product[]> {
+    const products = await this.productRepository.find({
+      where: { uuid: In(ids) },
+      relations: {
+        images: true,
+      },
+      order: criteria ? { [criteria]: orderDirection } : undefined,
+    });
 
-    if (criteria && orderDirection) {
-      query = query.orderBy(`prod.${criteria}`, orderDirection);
-    }
-    return query.getMany();
+    return products;
   }
 }
