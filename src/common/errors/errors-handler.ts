@@ -20,6 +20,10 @@ export class ErrorHandler {
       );
     }
 
+    if (error instanceof BadRequestException) {
+      throw error;
+    }
+
     this.logger.error(error);
     throw new InternalServerErrorException(`Unexpected error. Check logs`);
   }

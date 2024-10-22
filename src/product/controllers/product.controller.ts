@@ -33,7 +33,7 @@ export class ProductController {
 
   @Get('criteria')
   findByCriteria(@Query() paginationCriteria?: PaginationCriteriaDto) {
-    return this.productService.findByCriteria(paginationCriteria);
+    return this.productUseCase.getProductsByCriteriaUseCase(paginationCriteria);
   }
 
   @Get('random')

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Repository } from 'typeorm';
@@ -37,40 +37,58 @@ export class ProductService {
     }
   }
 
-  async findByCriteria(paginationCriteria: PaginationCriteriaDto) {
+  async findByCriteria(
+    limit: number,
+    filterCondition: string,
+    orderDirection: 'ASC' | 'DESC',
+    criteria: string,
+    filter: number,
+  ) {
     try {
-      const productBuilder = this.productRepository.createQueryBuilder('prod');
-      const { limit = 10, offset = 0, criteria, filter } = paginationCriteria;
+      const ids: string[] = (
+        await this.productRepository
+          .createQueryBuilder('prod')
+          .select(`DISTINCT ON (prod.${criteria}) prod.uuid`)
+          .where(`prod.${criteria} ${filterCondition}`, { filter })
+          .orderBy(`prod.${criteria}`, orderDirection)
+          .limit(limit)
+          .getRawMany()
+      ) //.getRawMany() Allow to use pure SQL like DISTINCT ON
+        .map((id) => id.uuid);
 
-      const isPriceCriteria = criteria === 'price';
-      const filterCondition =
-        isPriceCriteria && filter < 50 ? '< :filter' : '> :filter';
-      const orderDirection = isPriceCriteria && filter < 50 ? 'ASC' : 'DESC';
+      if (ids.length === 0) return [];
 
-      productBuilder
-        .where(`${criteria} ${filterCondition}`, { filter })
-        .orderBy(`${criteria}`, orderDirection)
-        .take(limit)
-        .skip(offset);
+      const products = await this.getProductsByIdsAndCriteria(
+        ids,
+        criteria,
+        orderDirection,
+      );
 
-      return await productBuilder.getMany();
+      return products;
     } catch (error) {
       ErrorHandler.handleExceptions(error);
     }
   }
 
-  //TODO: Mejorar para usar ORM
   async fetchRandom(pagination: PaginationCriteriaDto) {
-    const { limit = 10, offset = 0 } = pagination;
+    try {
+      const { limit = 10 } = pagination;
 
-    const randomProducts = await this.productRepository
-      .createQueryBuilder('product')
-      .orderBy('RANDOM()') // Para PostgreSQL
-      .skip(offset)
-      .take(limit)
-      .getMany();
+      const idsDB = await this.productRepository
+        .createQueryBuilder('prod')
+        .select('prod.uuid')
+        .orderBy('RANDOM()')
+        .take(limit)
+        .getMany();
 
-    return randomProducts;
+      const ids = idsDB.map((id) => id.uuid);
+
+      const randomProducts = await this.getProductsByIdsAndCriteria(ids);
+
+      return randomProducts;
+    } catch (error) {
+      ErrorHandler.handleExceptions(error);
+    }
   }
 
   async findOne(term: string): Promise<Product> {
@@ -166,5 +184,47 @@ export class ProductService {
     } catch (error) {
       ErrorHandler.handleExceptions(error);
     }
+  }
+
+  private getFilteredCondition(criteria: string, filter: number) {
+    const criteriaWhitelist = ['price', 'rating', 'reviews'];
+    const criteriaFix = criteria.toLowerCase().trim();
+
+    if (!criteriaWhitelist.includes(criteriaFix)) {
+      throw new BadRequestException(
+        `Criteria: '${criteria}' not allowed. Should be 'price', 'rating', 'reviews'`,
+      );
+    }
+    const isPriceCriteria = criteria === 'price';
+
+    const filterCondition =
+      isPriceCriteria && filter < 50 ? '< :filter' : '> :filter';
+
+    const orderDirection: 'ASC' | 'DESC' =
+      isPriceCriteria && filter < 50 ? 'ASC' : 'DESC';
+
+    return { filterCondition, orderDirection };
+  }
+
+  private async getProductsByIdsAndCriteria(
+    ids: string[],
+    criteria?: string,
+    orderDirection?: 'ASC' | 'DESC',
+  ) {
+    let query = this.productRepository
+      .createQueryBuilder('prod')
+      .leftJoinAndSelect('prod.categories', 'prodCategories')
+      .leftJoinAndSelect('prod.images', 'prodImages')
+      .leftJoinAndSelect(
+        'prod.specificationHighlights',
+        'prodSpecificationHighlights',
+      )
+      .leftJoinAndSelect('prod.customerReviews', 'prodCustomerReviews')
+      .where('prod.uuid IN (:...ids)', { ids });
+
+    if (criteria && orderDirection) {
+      query = query.orderBy(`prod.${criteria}`, orderDirection);
+    }
+    return query.getMany();
   }
 }
