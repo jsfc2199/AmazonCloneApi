@@ -111,7 +111,7 @@ export class ProductUseCase {
         price: product.price,
         rating: product.rating,
         reviews: product.reviews,
-        images: product.images.length > 0 ? [product.images[0].url] : [],
+        images: product.images.length > 0 ? product.images[0].url : '',
       };
     });
 

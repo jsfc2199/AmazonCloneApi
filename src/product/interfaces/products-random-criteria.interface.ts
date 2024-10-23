@@ -4,5 +4,5 @@ export interface ProductRandomCriteria {
   price: number;
   rating: number;
   reviews: number;
-  images: string[];
+  images: string;
 }
